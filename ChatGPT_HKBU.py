@@ -25,7 +25,7 @@ class HKBU_ChatGPT():
     #         return data['choices'][0]['message']['content']
     #     else:
     #         return 'Error:', response
-
+# sss
     
     def submit(self, message):
         conversation = [{"role": "user", "content": message}]
