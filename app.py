@@ -24,14 +24,14 @@ def main():
     # config.read('config.ini')
     # print(config['TELEGRAM']['ACCESS_TOKEN'])
     # updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']), use_context=True)
-    updater = Updater(token='TELEGRAM_ACCESS_TOKEN', use_context=True)
+    updater = Updater(token=TELEGRAM_ACCESS_TOKEN, use_context=True)
     # updater = Updater(token=(os.environ['ACCESS_TOKEN']), use_context=True)
     dispatcher = updater.dispatcher
 
     global redis1
-    redis1 = redis.Redis(host='REDIS_HOST',
-                         password='REDIS_PASSWORD',
-                         port='REDIS_PORT')
+    redis1 = redis.Redis(host= REDIS_HOST,
+                         password= REDIS_PASSWORD,
+                         port= REDIS_PORT)
     # redis1 = redis.Redis(host=(config['REDIS']['HOST']),
     # password=(config['REDIS']['PASSWORD']),
     # port=(config['REDIS']['REDISPORT']))
@@ -96,10 +96,10 @@ class HKBU_GPT():
     def submit(self, message):
         conversation = [{"role": "user", "content": message}]
         # url = (self.config['CHATGPT']['BASICURL']) + "/deployments/" + (self.config['CHATGPT']['MODELNAME']) + "/chat/completions/?api-version=" + (self.config['CHATGPT']['APIVERSION'])
-        url = 'CHATGPT_BASICURL' + "/deployments/" + 'CHATGPT_MODELNAME' + "/chat/completions/?api-version=" + (
+        url = CHATGPT_BASICURL + "/deployments/" + CHATGPT_MODELNAME + "/chat/completions/?api-version=" + (
         'CHATGPT_APIVERSION')
         # url = (os.environ['BASICURL']) + "/deployments/" + (os.environ['MODELNAME']) + "/chat/completions/?api-version=" + (os.environ['APIVERSION'])
-        headers = {'Content-Type': 'application/json', 'api-key': 'CHATGPT_ACCESS_TOKEN'}
+        headers = {'Content-Type': 'application/json', 'api-key': CHATGPT_ACCESS_TOKEN}
         # headers = { 'Content-Type': 'application/json', 'api-key': (os.environ['GPT_ACCESS_TOKEN']) }
         payload = {'messages': conversation}
         response = requests.post(url, json=payload, headers=headers)
