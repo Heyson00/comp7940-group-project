@@ -7,6 +7,7 @@ from telegram import Update
 import configparser
 import logging
 import redis
+global redis1
 
 #import subprocess
 #import redis_server
@@ -37,13 +38,13 @@ def main():
     # here we register an echo dispatcher
     # echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
     # dispatcher.add_handler(echo_handler)
-    dispatcher.add_handler(CommandHandler("add", add))
 
     global chatgpt
     #chatgpt = HKBU_GPT(config)
     chatgpt = HKBU_GPT()
     chatgpt_handler = MessageHandler(Filters.text & (~Filters.command),equiped_chatgpt)
     dispatcher.add_handler(chatgpt_handler)
+    dispatcher.add_handler(CommandHandler("add", add))
     # To start the bot:
     updater.start_polling()
     updater.idle()
