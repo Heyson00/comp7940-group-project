@@ -85,12 +85,12 @@ def add(update: Update, context: CallbackContext) -> None:
 
 class HKBU_GPT():
     # def __init__(self, config='./config.ini'):
-    def __init__(self, config='./config.ini'):
-        if type(config) == str:
-            self.config = configparser.ConfigParser()
-            self.config.read(config)
-        elif type(config) == configparser.ConfigParser:
-            self.config = config
+    # def __init__(self, config='./config.ini'):
+    #     if type(config) == str:
+    #         self.config = configparser.ConfigParser()
+    #         self.config.read(config)
+    #     elif type(config) == configparser.ConfigParser:
+    #         self.config = config
         # pass
 
     def submit(self, message):
