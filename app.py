@@ -49,7 +49,7 @@ def main():
     chatgpt = HKBU_GPT()
     chatgpt_handler = MessageHandler(Filters.text & (~Filters.command), equiped_chatgpt)
     dispatcher.add_handler(chatgpt_handler)
-    dispatcher.add_handler(CommandHandler("add", addUserInfo))
+    dispatcher.add_handler(CommandHandler("addUserInfo", addUserInfo))
     # To start the bot:
     updater.start_polling()
     updater.idle()
@@ -84,13 +84,13 @@ def addUserInfo(update: Update, context: CallbackContext) -> None:
 
 class HKBU_GPT():
     # def __init__(self, config='./config.ini'):
-    # def __init__(self, config='./config.ini'):
-    #     if type(config) == str:
-    #         self.config = configparser.ConfigParser()
-    #         self.config.read(config)
-    #     elif type(config) == configparser.ConfigParser:
-    #         self.config = config
-        # pass
+    def __init__(self, config='./config.ini'):
+        if type(config) == str:
+            self.config = configparser.ConfigParser()
+            self.config.read(config)
+        elif type(config) == configparser.ConfigParser:
+            self.config = config
+        pass
 
     def submit(self, message):
         conversation = [{"role": "user", "content": message}]
