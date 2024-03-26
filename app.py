@@ -20,18 +20,18 @@ import requests
 
 def main():
     # Load your token and create an Updater for your Bot
-    # config = configparser.ConfigParser()
-    # config.read('config.ini')
+    config = configparser.ConfigParser()
+    config.read('/config.ini')
     # print(config['TELEGRAM']['ACCESS_TOKEN'])
-    # updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']), use_context=True)
-    updater = Updater(token=TELEGRAM_ACCESS_TOKEN, use_context=True)
+    updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']), use_context=True)
+    # updater = Updater(token=('TELEGRAM_ACCESS_TOKEN'), use_context=True)
     # updater = Updater(token=(os.environ['ACCESS_TOKEN']), use_context=True)
     dispatcher = updater.dispatcher
 
     global redis1
-    redis1 = redis.Redis(host= REDIS_HOST,
-                         password= REDIS_PASSWORD,
-                         port= REDIS_PORT)
+    redis1 = redis.Redis(host='REDIS_HOST',
+                         password='REDIS_PASSWORD',
+                         port='REDIS_PORT')
     # redis1 = redis.Redis(host=(config['REDIS']['HOST']),
     # password=(config['REDIS']['PASSWORD']),
     # port=(config['REDIS']['REDISPORT']))
@@ -49,7 +49,7 @@ def main():
     chatgpt = HKBU_GPT()
     chatgpt_handler = MessageHandler(Filters.text & (~Filters.command), equiped_chatgpt)
     dispatcher.add_handler(chatgpt_handler)
-    dispatcher.add_handler(CommandHandler("add", add))
+    dispatcher.add_handler(CommandHandler("add", addUserInfo))
     # To start the bot:
     updater.start_polling()
     updater.idle()
@@ -70,17 +70,16 @@ def equiped_chatgpt(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=reply_message)
 
 
-def add(update: Update, context: CallbackContext) -> None:
+def addUserInfo(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /add is issued."""
     try:
         global redis1
         logging.info(context.args[0])
         msg = context.args[0]  # /add keyword <-- this should store the keyword
         redis1.incr(msg)
-        update.message.reply_text('You have said ' + msg + ' for ' +
-                                  redis1.get(msg).decode('UTF-8') + ' times.')
+        update.message.reply_text('Your information ' + msg + ' for ' + redis1.get(msg).decode('UTF-8') + ' times.')
     except (IndexError, ValueError):
-        update.message.reply_text('Usage: /add <keyword>')
+        update.message.reply_text('Usage: /addUserInfo <keyword>')
 
 
 class HKBU_GPT():
@@ -95,12 +94,12 @@ class HKBU_GPT():
 
     def submit(self, message):
         conversation = [{"role": "user", "content": message}]
-        # url = (self.config['CHATGPT']['BASICURL']) + "/deployments/" + (self.config['CHATGPT']['MODELNAME']) + "/chat/completions/?api-version=" + (self.config['CHATGPT']['APIVERSION'])
-        url = CHATGPT_BASICURL + "/deployments/" + CHATGPT_MODELNAME + "/chat/completions/?api-version=" + (
-        'CHATGPT_APIVERSION')
+        url = (self.config['CHATGPT']['BASICURL']) + "/deployments/" + (self.config['CHATGPT']['MODELNAME']) + "/chat/completions/?api-version=" + (self.config['CHATGPT']['APIVERSION'])
+        # url = 'CHATGPT_BASICURL' + "/deployments/" + 'CHATGPT_MODELNAME' + "/chat/completions/?api-version=" + ('CHATGPT_APIVERSION')
         # url = (os.environ['BASICURL']) + "/deployments/" + (os.environ['MODELNAME']) + "/chat/completions/?api-version=" + (os.environ['APIVERSION'])
-        headers = {'Content-Type': 'application/json', 'api-key': CHATGPT_ACCESS_TOKEN}
+        # headers = {'Content-Type': 'application/json', 'api-key': 'CHATGPT_ACCESS_TOKEN'}
         # headers = { 'Content-Type': 'application/json', 'api-key': (os.environ['GPT_ACCESS_TOKEN']) }
+        headers = { 'Content-Type': 'application/json', 'api-key': (self.config['CHATGPT']['ACCESS_TOKEN']) }
         payload = {'messages': conversation}
         response = requests.post(url, json=payload, headers=headers)
         if response.status_code == 200:
