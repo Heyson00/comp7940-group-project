@@ -21,7 +21,7 @@ import requests
 def main():
     # Load your token and create an Updater for your Bot
     config = configparser.ConfigParser()
-    config.read('/config.ini')
+    config.read('config.ini')
     # print(config['TELEGRAM']['ACCESS_TOKEN'])
     updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']), use_context=True)
     # updater = Updater(token=('TELEGRAM_ACCESS_TOKEN'), use_context=True)
