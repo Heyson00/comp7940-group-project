@@ -1,7 +1,8 @@
 import os
 import json
 import telegram
-from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
+from telegram.ext import Updater, MessageHandler, Filters, CommandHandler, CallbackContext
+from telegram import Update
 # The messageHandler is used for all message updates
 import configparser
 import logging
