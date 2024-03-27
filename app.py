@@ -1,8 +1,8 @@
 import os
 import json
 import telegram
-from telegram.ext import Updater, MessageHandler, Filters, CommandHandler, CallbackContext
-from telegram import Update
+from telegram.ext import Updater, MessageHandler, Filters, CommandHandler, CallbackContext, CallbackQueryHandler
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 # The messageHandler is used for all message updates
 import configparser
 import logging
@@ -45,8 +45,8 @@ def main():
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("add", addUserInfo))
     dispatcher.add_handler(CommandHandler("menu", getMenu))
-    dispatcher.add_handler(CommandHandler("comment", getComment))
     dispatcher.add_handler(CommandHandler("man", man))
+    dispatcher.add_handler(CallbackQueryHandler(button_click))
     # To start the bot:
     updater.start_polling()
     updater.idle()
@@ -105,30 +105,37 @@ def man(update: Update, context: CallbackContext) -> None:
 
 def getMenu(update: Update, context: CallbackContext) -> None:
     try:
-        global redis1
-        msg = redis1.get('menu')
-        update.message.reply_text('Menu:' + str(msg, encoding='utf-8'))
-    except (IndexError, ValueError):
-        update.message.reply_text('Something error')
-
-
-def getComment(update: Update, context: CallbackContext) -> None:
-    try:
-        global redis1
-        logging.info(context.args)
-        comment_string = ' '.join(context.args)
-        print(comment_string)
-        msg = redis1.get(comment_string)
-        update.message.reply_text('Comment of:' + comment_string + ' is below.' + str(msg, encoding='utf-8'))
-
+        text = 'Which drink do you want to know?'
         chat_id = update.effective_chat.id
-        print(chat_id)
-        photo_path = './pic/' + comment_string + '.jpg'
-        # print(photo_path)
-        context.bot.send_photo(chat_id=chat_id, photo=open(photo_path, 'rb'))
-
+        buttons = [
+            [InlineKeyboardButton("Boba Milk Tea", callback_data='Boba Milk Tea')],
+            [InlineKeyboardButton("Classic Milk Tea", callback_data='Classic Milk Tea')],
+            [InlineKeyboardButton("Green Milk Tea", callback_data='Green Milk Tea')],
+            [InlineKeyboardButton("Matcha Latte", callback_data='Matcha Latte')],
+            [InlineKeyboardButton("Taro Milk Tea", callback_data='Taro Milk Tea')]
+        ]
+        reply_markup = InlineKeyboardMarkup(buttons)
+        context.bot.send_message(chat_id=chat_id, text = text, reply_markup=reply_markup)
     except (IndexError, ValueError):
         update.message.reply_text('Something error')
+
+def button_click(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query.answer()
+    # query.edit_message_text(text=f"Selected option: {query.data}")
+    # logging.info({query.data})
+    global redis1
+    drinkName_string = ','.join(str(item) for item in {query.data})
+    # print(drinkName_string)
+    msg = redis1.get(drinkName_string)
+    query.edit_message_text('Comment of ' + drinkName_string + ' is below.' + str(msg, encoding='utf-8'))
+
+    chat_id = update.effective_chat.id
+    # print(chat_id)
+    photo_path = './pic/' + drinkName_string + '.jpg'
+    # print(photo_path)
+    context.bot.send_photo(chat_id=chat_id, photo=open(photo_path, 'rb'))
+
 
 
 class HKBU_GPT():
