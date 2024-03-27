@@ -139,7 +139,7 @@ def button_click(update: Update, context: CallbackContext):
 
 
 class HKBU_GPT():
-    def __init__(self, config='./config.ini'):
+    def __init__(self, config='/config.ini'):
         if type(config) == str:
             self.config = configparser.ConfigParser()
             self.config.read(config)
