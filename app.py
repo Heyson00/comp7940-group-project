@@ -39,6 +39,8 @@ def main():
     # You can set this logging module,
     # so you will know when and why things do not work as expected
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    logger_name = logger.name
     # register a dispatcher to handle message:
     # here we register an echo dispatcher
     # echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
@@ -74,10 +76,10 @@ def addUserInfo(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /add is issued."""
     try:
         global redis1
-        logging.info(context.args[0])
+        logging.__name__(context.args[0])
         msg = context.args[0]  # /add keyword <-- this should store the keyword
         redis1.incr(msg)
-        update.message.reply_text('Your information ' + msg + ' for ' + redis1.get(msg).decode('UTF-8') + ' times.')
+        update.message.reply_text('Your username ' + msg + ' has already stored ' + redis1.get(msg).decode('UTF-8') + ' times.')
     except (IndexError, ValueError):
         update.message.reply_text('Usage: /addUserInfo <keyword>')
 
