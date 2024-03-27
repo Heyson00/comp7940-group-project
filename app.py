@@ -17,6 +17,31 @@ global redis1
 # from gptbot import HKBU_GPT
 import requests
 
+def echo(update, context):
+    reply_message = update.message.text.upper()
+    logging.info("Update: " + str(update))
+    logging.info("context: " + str(context))
+    context.bot.send_message(chat_id=update.effective_chat.id, text=reply_message)
+
+
+def equiped_chatgpt(update, context):
+    global chatgpt
+    reply_message = chatgpt.submit(update.message.text)
+    logging.info("Update: " + str(update))
+    logging.info("context :" + str(context))
+    context.bot.send_message(chat_id=update.effective_chat.id, text=reply_message)
+
+
+def addUserInfo(update: Update, context: CallbackContext) -> None:
+    """Send a message when the command /add is issued."""
+    try:
+        global redis1
+        logging.__name__(context.args[0])
+        msg = context.args[0]  # /add keyword <-- this should store the keyword
+        redis1.incr(msg)
+        update.message.reply_text('Your username ' + msg + ' has already stored ' + redis1.get(msg).decode('UTF-8') + ' times.')
+    except (IndexError, ValueError):
+        update.message.reply_text('Usage: /addUserInfo <keyword>')
 
 def main():
     # Load your token and create an Updater for your Bot
@@ -57,35 +82,11 @@ def main():
     updater.idle()
 
 
-def echo(update, context):
-    reply_message = update.message.text.upper()
-    logging.info("Update: " + str(update))
-    logging.info("context: " + str(context))
-    context.bot.send_message(chat_id=update.effective_chat.id, text=reply_message)
-
-
-def equiped_chatgpt(update, context):
-    global chatgpt
-    reply_message = chatgpt.submit(update.message.text)
-    logging.info("Update: " + str(update))
-    logging.info("context :" + str(context))
-    context.bot.send_message(chat_id=update.effective_chat.id, text=reply_message)
-
-
-def addUserInfo(update: Update, context: CallbackContext) -> None:
-    """Send a message when the command /add is issued."""
-    try:
-        global redis1
-        logging.__name__(context.args[0])
-        msg = context.args[0]  # /add keyword <-- this should store the keyword
-        redis1.incr(msg)
-        update.message.reply_text('Your username ' + msg + ' has already stored ' + redis1.get(msg).decode('UTF-8') + ' times.')
-    except (IndexError, ValueError):
-        update.message.reply_text('Usage: /addUserInfo <keyword>')
+if __name__ == '__main__':
+    main()
 
 
 class HKBU_GPT():
-    # def __init__(self, config='./config.ini'):
     def __init__(self, config='./config.ini'):
         if type(config) == str:
             self.config = configparser.ConfigParser()
@@ -109,7 +110,4 @@ class HKBU_GPT():
             return data['choices'][0]['message']['content']
         else:
             return 'Error:', response
-
-
-if __name__ == '__main__':
-    main()
+        
