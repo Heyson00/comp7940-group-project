@@ -18,11 +18,6 @@ app = Flask(__name__)
 # subprocess.Popen([redis_server.REDIS_SERVER_PATH])
 # from gptbot import HKBU_GPT
 
-@app.before_first_request
-def before_first_request():
-    print('Flask应用程序已启动！')
-    main()
-    
 
 @app.route('/')
 def main():
