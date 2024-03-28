@@ -8,7 +8,6 @@ import configparser
 import logging
 import redis
 from flask import Flask, request, jsonify
-from urllib.parse import quote as url_quote
 
 global redis1
 app = Flask(__name__)
