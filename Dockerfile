@@ -8,4 +8,3 @@ RUN pip install pyproject
 RUN pip3 install uwsgi
 
 CMD python app.py
-CMD uwsgi --ini uwsgi.ini
