@@ -6,4 +6,4 @@ RUN pip install -r requirements.txt
 RUN pip install Flask
 RUN pip install gunicorn
 
-CMD gunicorn -w 4 -b 127.0.0.1:8888 app:app
+CMD gunicorn -w 4 -b 127.0.0.1:8080 app:app
