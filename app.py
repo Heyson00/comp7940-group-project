@@ -205,7 +205,7 @@ class HKBU_GPT():
 #     return port
 
 if __name__ == '__main__':
-    app.run(host="34.49.168.86", port=1280)
+    app.run(host="158.182.163.34", port=1280)
     # local_port = find_local_port()
     # print("Local port:", local_port) 
     
