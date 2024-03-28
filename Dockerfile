@@ -7,4 +7,4 @@ RUN pip install Flask
 RUN pip install gunicorn
 
 CMD python app.py
-CMD gunicorn wsgi:app
+CMD gunicorn -w 3 -b 127.0.0.1:5050 app:app
