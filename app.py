@@ -55,6 +55,7 @@ def main():
     # To start the bot:
     updater.start_polling()
     updater.idle()
+    return "abc"
 
 
 def echo(update, context):
@@ -205,7 +206,7 @@ class HKBU_GPT():
 #     return port
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port = 6000)
+    app.run(debug=True, port=os.getenv("PORT", default=6000), host='0.0.0.0')
     # local_port = find_local_port()
     # print("Local port:", local_port) 
     

@@ -7,5 +7,4 @@ RUN pip install Flask
 RUN pip install gunicorn
 
 EXPOSE 6000
-
-CMD gunicorn -c config.py app:app
+CMD ["gunicorn", "-c", "config.py", "app:app"]
