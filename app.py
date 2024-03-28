@@ -7,6 +7,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 import configparser
 import logging
 import redis
+import requests
 from flask import Flask, request, jsonify
 
 global redis1
@@ -18,7 +19,13 @@ app = Flask(__name__)
 # from gptbot import HKBU_GPT
 import requests
 
-@app.route('/main')
+@app.before_first_request
+def before_first_request():
+    print('Flask应用程序已启动！')
+    main()
+    
+
+@app.route('/')
 def main():
     # Load your token and create an Updater for your Bot
     config = configparser.ConfigParser()
@@ -51,6 +58,7 @@ def main():
     dispatcher.add_handler(CommandHandler("recommend", getRecommendList))
     dispatcher.add_handler(CommandHandler("man", man))
     dispatcher.add_handler(CallbackQueryHandler(button_click))
+
     # To start the bot:
     updater.start_polling()
     updater.idle()
@@ -195,16 +203,16 @@ class HKBU_GPT():
         else:
             return 'Error:', response
 
-def find_local_port(): 
-    import socket 
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-    s.bind(('localhost', 0)) 
-    address, port = s.getsockname() 
-    s.close() 
-    return port
+# def find_local_port(): 
+#     import socket 
+#     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+#     s.bind(('localhost', 0)) 
+#     address, port = s.getsockname() 
+#     s.close() 
+#     return port
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5050)
-    # local_port = find_local_port() 
+    # local_port = find_local_port()
     # print("Local port:", local_port) 
     
