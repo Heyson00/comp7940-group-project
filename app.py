@@ -7,8 +7,10 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 import configparser
 import logging
 import redis
+from flask import Flask, request, jsonify
 
 global redis1
+app = Flask(__name__)
 
 # import subprocess
 # import redis_server
@@ -16,11 +18,11 @@ global redis1
 # from gptbot import HKBU_GPT
 import requests
 
-
+@app.route('/main')
 def main():
     # Load your token and create an Updater for your Bot
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read('/config.ini')
     print(config['TELEGRAM']['ACCESS_TOKEN'])
     updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']), use_context=True)
     # updater = Updater(token=(os.environ['ACCESS_TOKEN']), use_context=True)
@@ -193,6 +195,16 @@ class HKBU_GPT():
         else:
             return 'Error:', response
 
+def find_local_port(): 
+    import socket 
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+    s.bind(('localhost', 0)) 
+    address, port = s.getsockname() 
+    s.close() 
+    return port
 
 if __name__ == '__main__':
-    main()
+    app.run(host="0.0.0.0", port=5050)
+    # local_port = find_local_port() 
+    # print("Local port:", local_port) 
+    
