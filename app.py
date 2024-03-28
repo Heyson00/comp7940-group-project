@@ -7,7 +7,6 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 import configparser
 import logging
 import redis
-import requests
 from flask import Flask, request, jsonify
 
 global redis1
@@ -17,7 +16,6 @@ app = Flask(__name__)
 # import redis_server
 # subprocess.Popen([redis_server.REDIS_SERVER_PATH])
 # from gptbot import HKBU_GPT
-import requests
 
 @app.before_first_request
 def before_first_request():
