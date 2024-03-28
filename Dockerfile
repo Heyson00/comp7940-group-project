@@ -8,4 +8,4 @@ RUN pip install gunicorn
 
 EXPOSE 6000
 
-RUN gunicorn --config gunicorn.conf app:app
+RUN gunicorn --config config.conf app:app
