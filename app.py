@@ -205,7 +205,7 @@ class HKBU_GPT():
 #     return port
 
 if __name__ == '__main__':
-    app.run(host="https://ggbond.zeabur.app", port=5050)
+    app.run(host="34.49.168.86", port=5050)
     # local_port = find_local_port()
     # print("Local port:", local_port) 
     
