@@ -20,7 +20,7 @@ import requests
 def main():
     # Load your token and create an Updater for your Bot
     config = configparser.ConfigParser()
-    config.read('/config.ini')
+    config.read('config.ini')
     print(config['TELEGRAM']['ACCESS_TOKEN'])
     updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']), use_context=True)
     # updater = Updater(token=(os.environ['ACCESS_TOKEN']), use_context=True)
@@ -45,6 +45,8 @@ def main():
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("add", addUserInfo))
     dispatcher.add_handler(CommandHandler("menu", getMenu))
+    dispatcher.add_handler(CommandHandler("brand", getBrand))
+    dispatcher.add_handler(CommandHandler("recommend", getRecommendList))
     dispatcher.add_handler(CommandHandler("man", man))
     dispatcher.add_handler(CallbackQueryHandler(button_click))
     # To start the bot:
@@ -70,9 +72,35 @@ def equiped_chatgpt(update, context):
 def start(update: Update, context: CallbackContext) -> None:
     try:
         update.message.reply_text('Wellcome to use our robot. I will provide you with ordering assistance for Heytea😁')
+        chat_id = update.effective_chat.id
+        # print(chat_id)
+        photo_path = './pic/Heytea.jpg'
+        # print(photo_path)
+        context.bot.send_photo(chat_id=chat_id, photo=open(photo_path, 'rb'))
     except (IndexError, ValueError):
         update.message.reply_text('Something error')
 
+def getRecommendList(update: Update, context: CallbackContext) -> None:
+    try:
+        global redis1
+        msg = redis1.get('Recommend')
+        msg = str(msg, encoding='utf-8')
+        format_msg = ',\n'.join(msg.split(','))
+        print(format_msg)
+        update.message.reply_text(format_msg)
+        update.message.reply_text('https://www.youtube.com/watch?v=sPBpg-u3CRQ')
+    except (IndexError, ValueError):
+        update.message.reply_text('Something error')
+
+
+def getBrand(update: Update, context: CallbackContext) -> None:
+    try:
+        global redis1
+        msg = redis1.get('Brand introduction')
+        update.message.reply_text(str(msg, encoding='utf-8'))
+        update.message.reply_text('https://www.youtube.com/watch?v=OUauKtSa5q0')
+    except (IndexError, ValueError):
+        update.message.reply_text('Something error')
 
 def addUserInfo(update: Update, context: CallbackContext) -> None:
     try:
@@ -112,7 +140,10 @@ def getMenu(update: Update, context: CallbackContext) -> None:
             [InlineKeyboardButton("Classic Milk Tea", callback_data='Classic Milk Tea')],
             [InlineKeyboardButton("Green Milk Tea", callback_data='Green Milk Tea')],
             [InlineKeyboardButton("Matcha Latte", callback_data='Matcha Latte')],
-            [InlineKeyboardButton("Taro Milk Tea", callback_data='Taro Milk Tea')]
+            [InlineKeyboardButton("Taro Milk Tea", callback_data='Taro Milk Tea')],
+            [InlineKeyboardButton("Zhizhiberry", callback_data='Zhizhiberry')],
+            [InlineKeyboardButton("Succulent grapes", callback_data='Succulent grapes')],
+            [InlineKeyboardButton("Succulent mango nectar", callback_data='Succulent mango nectar')]
         ]
         reply_markup = InlineKeyboardMarkup(buttons)
         context.bot.send_message(chat_id=chat_id, text = text, reply_markup=reply_markup)
