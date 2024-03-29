@@ -6,5 +6,5 @@ RUN pip install -r requirements.txt
 RUN pip install Flask
 RUN pip install gunicorn
 
-CMD gunicorn -c config.py app:app
+CMD gunicorn -c config.py app:app -k 'gevent'
 # CMD python app.py
