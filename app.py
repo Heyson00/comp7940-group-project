@@ -12,7 +12,6 @@ from flask import Flask, request, jsonify
 
 global redis1
 app = Flask(__name__)
-
 # import subprocess
 # import redis_server
 # subprocess.Popen([redis_server.REDIS_SERVER_PATH])
@@ -172,8 +171,16 @@ def button_click(update: Update, context: CallbackContext):
     # print(photo_path)
     context.bot.send_photo(chat_id=chat_id, photo=open(photo_path, 'rb'))
 
+def singleton(cls):
+    instances = {}
+    def get_instance(*args, **kwargs):
+        if cls not in instances:
+            instances[cls] = cls(*args, **kwargs)
+        return instances[cls]
+    return get_instance
 
 
+@singleton
 class HKBU_GPT():
     def __init__(self, config='/config.ini'):
         if type(config) == str:
