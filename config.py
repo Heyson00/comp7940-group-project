@@ -5,6 +5,6 @@ bind = '0.0.0.0:8080'
 # 工作进程数
 workers = 1
 # 工作线程数
-threads = 3
+threads = 1
 # 超时时间
 timeout = 600
