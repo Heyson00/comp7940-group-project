@@ -7,4 +7,4 @@ workers = 1
 # 工作线程数
 threads = 2
 # 超时时间
-timeout = 600
+timeout = 60000000000000
