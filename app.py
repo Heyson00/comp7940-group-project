@@ -18,7 +18,7 @@ app = Flask(__name__)
 # from gptbot import HKBU_GPT
 
 
-@app.route('/')
+@app.route('/main')
 def main():
     # Load your token and create an Updater for your Bot
     config = configparser.ConfigParser()
