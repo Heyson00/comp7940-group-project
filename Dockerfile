@@ -8,4 +8,3 @@ RUN pip install gunicorn
 RUN pip install --upgrade gevent
 
 CMD gunicorn -c config.py app:app -k 'gevent'
-CMD python app.py
